@@ -1,4 +1,8 @@
 ---
 
-hdsentinel_version: 0.17  # HDSentinel version that want to be installed
+hdsentinel_version: hdsentinel-020c  # HDSentinel version that want to be installed
+hdsentinel_download_url: https://www.hdsentinel.com/hdslin/{{ hdsentinel_exporter_hdsentinel_version }}-x64.zip
+
 hdsentinel_update: false  # Set true if want to update HDSentinel
+
+hdsentinel_bin_path: /usr/local/bin/hdsentinel

@@ -1,26 +1,35 @@
 ---
 
 - name: Check if hdsentinel is installed
-  stat:
-    path: /usr/local/bin/hdsentinel
+  ansible.builtin.stat:
+    path: "{{ hdsentinel_bin_path }}"
   register: hdsentinel_bin
 
-- block:
+- name: Install HDSentinel binary
+  when: not hdsentinel_bin.stat.exists or hdsentinel_update | bool
+  block:
+
+    - name: Ensure unzip is installed
+      ansible.builtin.package:
+        name: unzip
+        state: present
+      delegate_to: localhost
 
     - name: Download hdsentinel binary
-      get_url:
-        url: 'https://www.hdsentinel.com/hdslin/hdsentinel-{{ hdsentinel_version | replace(".", "") }}.gz'
-        dest: '/tmp/hdsentinel-{{ hdsentinel_version | replace(".", "") }}.gz'
+      ansible.builtin.get_url:
+        url: "{{ hdsentinel_download_url }}"
+        dest: /tmp/hdsentinel.zip
+        mode: "0644"
       delegate_to: localhost
 
     - name: Unarchive hdsentinel binary
-      command: 'gunzip -f /tmp/hdsentinel-{{ hdsentinel_version | replace(".", "") }}.gz'
+      ansible.builtin.unarchive:
+        src: /tmp/hdsentinel.zip
+        dest: /tmp/
       delegate_to: localhost
 
     - name: Propagate hdsentinel binary
-      copy:
-        src: '/tmp/hdsentinel-{{ hdsentinel_version | replace(".", "") }}'
-        dest: /usr/local/bin/hdsentinel
+      ansible.builtin.copy:
+        src: /tmp/HDSentinel
+        dest: "{{ hdsentinel_bin_path }}"
         mode: 0755
-
-  when: not hdsentinel_bin.stat.exists or hdsentinel_update | bool

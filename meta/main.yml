@@ -5,14 +5,14 @@ galaxy_info:
   role_name: hdsentinel
   author: Agnesius Santo Naibaho
   description: Ansible role to install hdsentinel
-  company: Cloudweeb
+  company: JagoanHosting
   license: MIT
-  min_ansible_version: 2.7
+  min_ansible_version: "2.7"
   platforms:
     - name: EL
       versions:
-        - 7
+        - all
     - name: Debian
       versions:
-        - stretch
+        - all
   galaxy_tags: []

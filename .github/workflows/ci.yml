@@ -1,0 +1,36 @@
+---
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  molecule:
+    name: Molecule (${{ matrix.molecule_distro }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        molecule_distro:
+          - centos7
+          - debian9
+    env:
+      MOLECULE_DISTRO: ${{ matrix.molecule_distro }}
+      PY_COLORS: "1"
+      ANSIBLE_FORCE_COLOR: "1"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install test dependencies
+        run: pip install molecule docker testinfra ansible-lint yamllint flake8
+
+      - name: Run Molecule tests
+        run: molecule test
