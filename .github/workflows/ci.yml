@@ -13,8 +13,8 @@ jobs:
       fail-fast: false
       matrix:
         molecule_distro:
-          - centos7
-          - debian9
+          - rockylinux9
+          - debian13
     env:
       MOLECULE_DISTRO: ${{ matrix.molecule_distro }}
       PY_COLORS: "1"
